@@ -26,4 +26,16 @@ For native GPU support on Windows you will need:
 
 - https://www.kaggle.com/datasets/bhavikjikadara/dog-and-cat-classification-dataset/data
 
+## Running the app using docker
 
+Building docker image using docker file
+- docker build -t [specify_image_name]
+
+Pulling created docker image from docker hub
+- docker pull mychnik/kotkiipieski:1.0
+
+Running application using docker
+- docker run -p 8501:8501 [image_id]
+
+Using application
+- app is avaliable at  http://localhost:8501 after running container
