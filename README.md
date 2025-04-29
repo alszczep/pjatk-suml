@@ -28,14 +28,21 @@ For native GPU support on Windows you will need:
 
 ## Running the app using docker
 
-Building docker image using docker file
-- docker build -t [specify_image_name]
+The easiest way to get the app running is to use docker compose:
+- running: `docker-compose up`
+- rebuilding: `docker-compose build`
 
-Pulling created docker image from docker hub
-- docker pull mychnik/kotkiipieski:1.0
+Alternatively, you can run the app by building the image manually.
 
-Running application using docker
-- docker run -p 8501:8501 [image_id]
+Building docker image using docker file:
+- `docker build -f ./docker/app.Dockerfile -t [specify_image_tag_if_needed] .`
 
-Using application
-- app is avaliable at  http://localhost:8501 after running container
+Pulling created docker image from docker hub:
+- `docker pull mychnik/kotkiipieski:1.0`
+
+Running application using docker:
+- `docker run -p 8501:8501 [image_id]`
+
+Using application:
+- The app is available at http://localhost:8501 after running the container
+

@@ -1,8 +1,8 @@
 import streamlit as st
 
 from model.model import train_or_load_model
-from pages.client import catOrDog
 from pages.admin import manageDataSet, usageHistory
+from pages.client import catOrDog
 
 model = train_or_load_model()
 

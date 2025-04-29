@@ -1,8 +1,10 @@
 import streamlit as st
 from PIL import Image
 from tensorflow import keras
-from model.model import predict, cat_class_index
 import numpy as np
+
+from model.model import predict, cat_class_index
+
 
 def mkRun(model):
     def run():

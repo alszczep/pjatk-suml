@@ -1,7 +1,7 @@
 import os
 
 import tensorflow as tf
-from keras.utils import to_categorical
+from keras.src.utils import to_categorical
 from tensorflow import keras
 import numpy as np
 import random
@@ -134,10 +134,10 @@ def train_model(model, x_train, y_train, x_val, y_val):
         validation_data=(x_val, y_val),
     )
 
+
 def evaluate_model(model, x_test, y_test):
     test_loss, test_acc = model.evaluate(x_test, y_test)
     return test_loss, test_acc
-
 
 def predict(model, x):
     return model.predict(x)[0]
