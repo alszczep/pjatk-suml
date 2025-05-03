@@ -143,14 +143,14 @@ def predict(model, x):
     return model.predict(x)[0]
 
 
-def train_or_load_model():
-    model_path = "saved_model.keras"
+def train_and_save_model():
+    model_path = "../saved_model.keras"
 
-    if os.path.exists(model_path):
-        print("Existing model found.")
-        return keras.models.load_model(model_path)
-    else:
-        print("No existing model found. Training a new model...")
+    # if os.path.exists(model_path):
+    #     print("Existing model found.")
+    #     return keras.models.load_model(model_path)
+    # else:
+    #     print("No existing model found. Training a new model...")
 
     set_seed(42)
     check_device()

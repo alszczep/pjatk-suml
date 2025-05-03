@@ -1,0 +1,17 @@
+import streamlit as st
+
+from pages.admin import usageHistory, manageDataSet
+from pages.client import catOrDog
+
+pages = {
+    "Klient": [
+        st.Page(catOrDog.run, title="Kot czy pies?", default=True),
+    ],
+    "Admin": [
+        st.Page(manageDataSet.run, title="Zarządzanie zestawem danych", url_path="admin--manage-data-set"),
+        st.Page(usageHistory.run, title="Historia użycia aplkiacji klienckiej", url_path="admin--usage-history"),
+    ],
+}
+
+pg = st.navigation(pages)
+pg.run()
