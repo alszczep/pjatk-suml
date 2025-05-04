@@ -3,6 +3,9 @@ import os
 import sys
 
 def main():
+    from dotenv import load_dotenv
+    load_dotenv()
+
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'api.settings')
 
     from django.core.management.commands.runserver import Command as runserver
