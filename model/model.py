@@ -146,12 +146,6 @@ def predict(model, x):
 def train_and_save_model():
     model_path = "../saved_model.keras"
 
-    # if os.path.exists(model_path):
-    #     print("Existing model found.")
-    #     return keras.models.load_model(model_path)
-    # else:
-    #     print("No existing model found. Training a new model...")
-
     set_seed(42)
     check_device()
 
@@ -164,5 +158,6 @@ def train_and_save_model():
     evaluate_model(model, x_test, y_test)
 
     model.save(model_path)
+    # TODO: save to storage
 
     return model

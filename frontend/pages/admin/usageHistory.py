@@ -1,29 +1,33 @@
+import os
+from io import BytesIO
+
 import streamlit as st
-import pandas as pd
+import requests
 import json
 from PIL import Image
 
+cat_class_index = 0
+
 def run():
     st.title("Historia użycia aplikacji klienckiej")
-    json_data = '''
-    [
-        {"result": "Dobrze - przewidziano kota", "responseTime": 100,"userReview": "Mój kot to najlepszy zwierzak na świecie", "userMark": "👍", "photo": "pages/admin/images/cat1.jpg"},
-        {"result": "Dobrze - przewidziano kota", "responseTime": 15,"userReview": "Ale kocur hehe", "userMark": "👍", "photo": "pages/admin/images/cat2.jpg"},
-        {"result": "Źle - przewidziano psa", "responseTime": 10000,"userReview": "Działa jak zwykle, czyli nie działa", "userMark": "👎", "photo": "pages/admin/images/cat3.jpg"},
-        {"result": "Dobrze - przewidziano psa", "responseTime": 200,"userReview": "Mój pies odrazu został rozpoznany", "userMark": "👍",  "photo": "pages/admin/images/dog1.jpg"}
-    ]
-    '''
 
-    # Parsujemy JSON
-    data = json.loads(json_data)
+    response = requests.get(os.environ["API_URL"] + "/api/all_predictions")
 
-    # Dla każdego rekordu wyświetlamy dane + zdjęcie
+    if response.status_code != 200:
+        st.error("Nie udało się pobrać listy")
+        return
+
+    predictions_list = response.json()
+
     st.markdown("### MODEL_1_PSY_KOTY 👤Akcje użytkowników:")
 
-    for item in data:
+    for prediction in predictions_list:
         col1, col2 = st.columns([1, 3])
         with col1:
-            img = Image.open(item["photo"])
+            img_response = requests.get(prediction["file_url"])
+            img = Image.open(BytesIO(img_response.content))
             st.image(img, width=100)
         with col2:
-            st.markdown(f"**Wynik:** {item['result']}  \n**Czas odpowiedzi (ms):** {item['responseTime']}  \n**Opinia:** {item['userReview']}  \n**Ocena:** {item['userMark']}")
+            vote = "Pozytywna" if prediction['is_vote_positive'] else "Negatywna"
+            result = "Kot" if prediction['predicted_class'] == cat_class_index else "Pies"
+            st.markdown(f"**Wynik:** {result}  \n**Data i czas:** {prediction['prediction_date_time']}  \n**Opinia:** {prediction['feedback']}  \n**Ocena:** {vote}")

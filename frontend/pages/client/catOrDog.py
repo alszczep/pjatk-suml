@@ -1,16 +1,20 @@
+import os
+
+import requests
 import streamlit as st
 from PIL import Image
-from tensorflow import keras
-import numpy as np
 
 cat_class_index = 0
 
-def setReview(review, mark):
+def setReview(review, mark, prediction_id):
     st.write("Dziękujemy za wystawioną opinię!")
     if mark:
         st.write("Będziemy dalej się rozwijać")
     else:
         st.write("Obiecujemy poprawę jakości naszych usług")
+
+    json_params = {"prediction_id": prediction_id, "is_vote_positive": mark, "feedback": review}
+    requests.post(os.environ["API_URL"] + "/api/change_vote_and_feedback", json=json_params)
 
 def run():
     st.title("Kot czy pies?")
@@ -21,18 +25,16 @@ def run():
         image = Image.open(uploaded_file)
         st.image(image, caption="Wgrane zdjęcie", use_container_width=True)
 
-        resized_image = image.resize((32, 32))
-        img_array = keras.preprocessing.image.img_to_array(resized_image)
-        img_array = img_array.astype('float32') / 255.0
-        img_array = np.expand_dims(img_array, axis=0)
+        files = {'file': (uploaded_file.name, uploaded_file.getvalue(), uploaded_file.type)}
+        response = requests.post(os.environ["API_URL"] + "/api/predict", files=files)
 
-        # predictions = predict(model, img_array)
-        # TODO: replace with a backend call
-        predictions = [0.1, 0.9]
+        if response.status_code != 200:
+            st.error("Wystąpił błąd podczas przetwarzania obrazu.")
+            return
 
-        print("Predictions:", predictions)
+        predicted_class = response.json().get("predicted_class")
+        prediction_id = response.json().get("prediction_id")
 
-        predicted_class = np.argmax(predictions)
         if predicted_class == cat_class_index:
             st.write("To jest kot")
         else:
@@ -41,7 +43,7 @@ def run():
         review = st.text_input("Zostaw swoją opinię o wyniku, jest dla nas ważna!")
         down_vote, up_vote = st.columns(2)
         if down_vote.button("Ocena pozytywna", icon="👍", use_container_width=True):
-            setReview(review, True)
+            setReview(review, True, prediction_id)
 
         if up_vote.button("Ocena negatywna", icon="👎", use_container_width=True):
-            setReview(review, False)
+            setReview(review, False, prediction_id)
