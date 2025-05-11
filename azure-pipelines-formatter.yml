@@ -26,4 +26,3 @@ steps:
   - script: |
       pre-commit run --all-files
     displayName: 'Run pre-commit'
-
