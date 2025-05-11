@@ -1,8 +1,7 @@
 import streamlit as st
 
-
-from pages.client import catOrDog
 from pages.admin import manageDataSet, usageHistory
+from pages.client import catOrDog
 
 pages = {
     "Klient": [
