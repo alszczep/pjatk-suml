@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class CatDogPrediction(models.Model):
     file_url = models.CharField(max_length=2000)
     predicted_class = models.IntegerField()

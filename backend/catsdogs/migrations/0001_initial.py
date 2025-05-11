@@ -7,20 +7,35 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='CatDogPrediction',
+            name="CatDogPrediction",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('file_url', models.CharField(max_length=2000)),
-                ('predicted_class', models.IntegerField()),
-                ('prediction_date_time', models.DateTimeField()),
-                ('is_vote_positive', models.BooleanField(blank=True, default=None, null=True)),
-                ('feedback', models.CharField(blank=True, default=None, max_length=2000, null=True)),
-                ('is_included_in_training_dataset', models.BooleanField(default=False)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("file_url", models.CharField(max_length=2000)),
+                ("predicted_class", models.IntegerField()),
+                ("prediction_date_time", models.DateTimeField()),
+                (
+                    "is_vote_positive",
+                    models.BooleanField(blank=True, default=None, null=True),
+                ),
+                (
+                    "feedback",
+                    models.CharField(
+                        blank=True, default=None, max_length=2000, null=True
+                    ),
+                ),
+                ("is_included_in_training_dataset", models.BooleanField(default=False)),
             ],
         ),
     ]
