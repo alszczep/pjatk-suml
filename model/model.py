@@ -2,9 +2,9 @@ import os
 import random
 
 import kagglehub
+from keras.src.utils import to_categorical
 import numpy as np
 import tensorflow as tf
-from keras.src.utils import to_categorical
 from tensorflow import keras
 
 cat_class_index = 0

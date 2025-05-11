@@ -1,9 +1,9 @@
-import os
 from io import BytesIO
+import os
 
+from PIL import Image
 import requests
 import streamlit as st
-from PIL import Image
 
 cat_class_index = 0
 

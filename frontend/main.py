@@ -1,7 +1,6 @@
+from frontendpages.admin import manageDataSet, usageHistory
+from frontendpages.client import catOrDog
 import streamlit as st
-
-from pages.admin import manageDataSet, usageHistory
-from pages.client import catOrDog
 
 pages = {
     "Klient": [

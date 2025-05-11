@@ -1,10 +1,10 @@
 import os
 
-import numpy as np
+from PIL import Image
 from django.http import HttpResponse, JsonResponse
 from django.utils import timezone
 from keras import models, preprocessing
-from PIL import Image
+import numpy as np
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
