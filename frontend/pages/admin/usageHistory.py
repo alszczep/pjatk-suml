@@ -1,12 +1,12 @@
 import os
 from io import BytesIO
 
-import streamlit as st
 import requests
-import json
+import streamlit as st
 from PIL import Image
 
 cat_class_index = 0
+
 
 def run():
     st.title("Historia użycia aplikacji klienckiej")
@@ -28,6 +28,10 @@ def run():
             img = Image.open(BytesIO(img_response.content))
             st.image(img, width=100)
         with col2:
-            vote = "Pozytywna" if prediction['is_vote_positive'] else "Negatywna"
-            result = "Kot" if prediction['predicted_class'] == cat_class_index else "Pies"
-            st.markdown(f"**Wynik:** {result}  \n**Data i czas:** {prediction['prediction_date_time']}  \n**Opinia:** {prediction['feedback']}  \n**Ocena:** {vote}")
+            vote = "Pozytywna" if prediction["is_vote_positive"] else "Negatywna"
+            result = (
+                "Kot" if prediction["predicted_class"] == cat_class_index else "Pies"
+            )
+            st.markdown(
+                f"**Wynik:** {result}  \n**Data i czas:** {prediction['prediction_date_time']}  \n**Opinia:** {prediction['feedback']}  \n**Ocena:** {vote}"
+            )

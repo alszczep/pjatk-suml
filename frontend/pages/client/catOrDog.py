@@ -6,6 +6,7 @@ from PIL import Image
 
 cat_class_index = 0
 
+
 def setReview(review, mark, prediction_id):
     st.write("Dziękujemy za wystawioną opinię!")
     if mark:
@@ -13,19 +14,30 @@ def setReview(review, mark, prediction_id):
     else:
         st.write("Obiecujemy poprawę jakości naszych usług")
 
-    json_params = {"prediction_id": prediction_id, "is_vote_positive": mark, "feedback": review}
-    requests.post(os.environ["API_URL"] + "/api/change_vote_and_feedback", json=json_params)
+    json_params = {
+        "prediction_id": prediction_id,
+        "is_vote_positive": mark,
+        "feedback": review,
+    }
+    requests.post(
+        os.environ["API_URL"] + "/api/change_vote_and_feedback", json=json_params
+    )
+
 
 def run():
     st.title("Kot czy pies?")
 
-    uploaded_file = st.file_uploader("Wgraj zdjęcie kota albo psa", type=["jpg", "jpeg", "png"])
+    uploaded_file = st.file_uploader(
+        "Wgraj zdjęcie kota albo psa", type=["jpg", "jpeg", "png"]
+    )
 
     if uploaded_file is not None:
         image = Image.open(uploaded_file)
         st.image(image, caption="Wgrane zdjęcie", use_container_width=True)
 
-        files = {'file': (uploaded_file.name, uploaded_file.getvalue(), uploaded_file.type)}
+        files = {
+            "file": (uploaded_file.name, uploaded_file.getvalue(), uploaded_file.type)
+        }
         response = requests.post(os.environ["API_URL"] + "/api/predict", files=files)
 
         if response.status_code != 200:

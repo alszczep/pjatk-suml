@@ -59,5 +59,3 @@ To create migrations you can use:
 
 To apply migrations you can use:
 `python manage.py migrate`
-
-
