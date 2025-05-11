@@ -12,7 +12,7 @@ exclude =
     env,
     venv,
     .mypy_cache,
-    .pytest_cache
+    .pytest_cache,
+    Dockerfile
 
 format = default
-
