@@ -73,7 +73,7 @@ stages:
     - task: AzureCLI@2
       displayName: kubectl apply
       inputs:
-        azureSubscription: 'Azure for Students'
+        azureSubscription: 'PJATK-SUML-Connection'
         scriptType: bash
         scriptLocation: inlineScript
         inlineScript: |
