@@ -73,7 +73,7 @@ stages:
     - task: AzureCLI@2
       displayName: kubectl apply
       inputs:
-        azureSubscription: 'Azure for students'
+        azureSubscription: 'Azure for Students'
         scriptType: bash
         scriptLocation: inlineScript
         inlineScript: |
