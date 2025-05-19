@@ -13,11 +13,15 @@ variables:
   dockerRegistryServiceConnection: 'dc637954-eec2-47d8-9cf7-bc9a0c62779f'
   imageRepository: 'kotkiipieski'
   containerRegistry: 'pjatksuml3scrummasterow.azurecr.io'
-  dockerfilePath: '$(Build.SourcesDirectory)/backend/Dockerfile'
+  dockerfileBackendPath: '$(Build.SourcesDirectory)/backend/Dockerfile'
+  dockerfileFrontendPath: '$(Build.SourcesDirectory)/frontend/Dockerfile'
+  dockerfileMigrationsPath: '$(Build.SourcesDirectory)/backend/migrations.Dockerfile'
   tag: '$(Build.BuildId)'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
+  aksResourceGroup: 'PJATK-SUML'
+  aksClusterName: 'KotkiiPieskiCluster'
 
 stages:
 - stage: Build
@@ -29,11 +33,55 @@ stages:
       name: 'Default'
     steps:
     - task: Docker@2
-      displayName: Build and push an image to container registry
+      displayName: Build and push backend image
       inputs:
         command: buildAndPush
-        repository: $(imageRepository)
-        dockerfile: $(dockerfilePath)
+        repository: $(imageRepository)/backend
+        dockerfile: $(dockerfileBackendPath)
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
+
+    - task: Docker@2
+      displayName: Build and push frontend image
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepository)/frontend
+        dockerfile: $(dockerfileFrontendPath)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+    
+    - task: Docker@2
+    displayName: Build and push migrations image
+    inputs:
+      command: buildAndPush
+      repository: $(imageRepository)/migrations
+      dockerfile: $(dockerfileMigrationsPath)
+      containerRegistry: $(dockerRegistryServiceConnection)
+      tags: |
+        $(tag)
+  - stage: Deploy
+  displayName: Deploy to AKS
+  dependsOn: Build
+  jobs:
+  - job: Deploy
+    displayName: Deploy to Kubernetes
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - task: AzureCLI@2
+      displayName: kubectl apply
+      inputs:
+        azureSubscription: 'Azure for students'
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+          az aks get-credentials \
+            --resource-group $(aksResourceGroup) \
+            --name $(aksClusterName) \
+            --overwrite-existing
+
+          echo "Applying Kubernetes manifests..."
+          kubectl apply -f $(Build.SourcesDirectory)/k8s/
+    
