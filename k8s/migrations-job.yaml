@@ -7,7 +7,7 @@ spec:
     spec:
       containers:
       - name: migrations
-        image: pjatksuml3scrummasterow.azurecr.io/migrations:latest
+        image: pjatksuml3scrummasterow.azurecr.io/kotkiipieski/migrations:latest
         env:
         - name: ALLOWED_HOSTS
           value: "api,localhost"
