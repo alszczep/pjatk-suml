@@ -74,14 +74,14 @@ stages:
       displayName: kubectl apply
       inputs:
         azureSubscription: 'PJATK-SUML-Connection'
-        scriptType: bash
+        scriptType: ps
         scriptLocation: inlineScript
         inlineScript: |
-          az aks get-credentials \
-            --resource-group $(aksResourceGroup) \
-            --name $(aksClusterName) \
-            --overwrite-existing
+          az aks get-credentials `
+          --resource-group $(aksResourceGroup) `
+          --name $(aksClusterName) `
+          --overwrite-existing
 
-          echo "Applying Kubernetes manifests..."
-          kubectl apply -f $(Build.SourcesDirectory)/k8s/
+          Write-Host "Applying Kubernetes manifests..."
+          kubectl apply -f "$(Build.SourcesDirectory)/k8s/"
     
