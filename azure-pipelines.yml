@@ -68,7 +68,7 @@ stages:
   - job: Deploy
     displayName: Deploy to Kubernetes
     pool:
-      vmImage: $(vmImageName)
+      name: 'Default'
     steps:
     - task: AzureCLI@2
       displayName: kubectl apply
