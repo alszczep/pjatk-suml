@@ -61,7 +61,7 @@ stages:
       containerRegistry: $(dockerRegistryServiceConnection)
       tags: |
         $(tag)
-  - stage: Deploy
+- stage: Deploy
   displayName: Deploy to AKS
   dependsOn: Build
   jobs:
