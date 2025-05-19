@@ -23,6 +23,21 @@ def setReview(review, mark, prediction_id):
         os.environ["API_URL"] + "/api/change_vote_and_feedback", json=json_params
     )
 
+def predict(uploaded_file):
+    if st.session_state.predicted_class is not None or st.session_state.prediction_id is not None:
+        return
+
+    files = {
+        "file": (uploaded_file.name, uploaded_file.getvalue(), uploaded_file.type)
+    }
+    response = requests.post(os.environ["API_URL"] + "/api/predict", files=files)
+
+    if response.status_code != 200:
+        st.error("Wystąpił błąd podczas przetwarzania obrazu.")
+        return
+
+    st.session_state.predicted_class = response.json().get("predicted_class")
+    st.session_state.prediction_id = response.json().get("prediction_id")
 
 def run():
     st.title("Kot czy pies?")
@@ -31,23 +46,16 @@ def run():
         "Wgraj zdjęcie kota albo psa", type=["jpg", "jpeg", "png"]
     )
 
-    if uploaded_file is not None:
+    if uploaded_file is None:
+        st.session_state.predicted_class = None
+        st.session_state.prediction_id = None
+    else:
         image = Image.open(uploaded_file)
         st.image(image, caption="Wgrane zdjęcie", use_container_width=True)
 
-        files = {
-            "file": (uploaded_file.name, uploaded_file.getvalue(), uploaded_file.type)
-        }
-        response = requests.post(os.environ["API_URL"] + "/api/predict", files=files)
+        predict(uploaded_file)
 
-        if response.status_code != 200:
-            st.error("Wystąpił błąd podczas przetwarzania obrazu.")
-            return
-
-        predicted_class = response.json().get("predicted_class")
-        prediction_id = response.json().get("prediction_id")
-
-        if predicted_class == cat_class_index:
+        if st.session_state.predicted_class == cat_class_index:
             st.write("To jest kot")
         else:
             st.write("To jest pies")
@@ -55,7 +63,7 @@ def run():
         review = st.text_input("Zostaw swoją opinię o wyniku, jest dla nas ważna!")
         down_vote, up_vote = st.columns(2)
         if down_vote.button("Ocena pozytywna", icon="👍", use_container_width=True):
-            setReview(review, True, prediction_id)
+            setReview(review, True, st.session_state.prediction_id)
 
         if up_vote.button("Ocena negatywna", icon="👎", use_container_width=True):
-            setReview(review, False, prediction_id)
+            setReview(review, False, st.session_state.prediction_id)
