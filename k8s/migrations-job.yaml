@@ -1,0 +1,43 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrations
+spec:
+  template:
+    spec:
+      containers:
+      - name: migrations
+        image: pjatksuml3scrummasterow.azurecr.io/migrations:latest
+        env:
+        - name: ALLOWED_HOSTS
+          value: "api,localhost"
+        - name: API_PORT
+          value: "8000"
+        - name: SECRET_KEY
+          value: dev_secret
+        - name: DB_ADDRESS
+          valueFrom:
+            secretKeyRef:
+              name: migration-secrets
+              key: DB_ADDRESS
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: migration-secrets
+              key: DB_USER
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: migration-secrets
+              key: DB_PASSWORD
+        - name: DB_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: migration-secrets
+              key: DB_DATABASE
+        - name: DB_PORT
+          valueFrom:
+            secretKeyRef:
+              name: migration-secrets
+              key: DB_PORT
+      restartPolicy: Never

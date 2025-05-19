@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: pjatksuml3scrummasterow.azurecr.io/kotkiipieski:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: ALLOWED_HOSTS
+          value: "api,localhost"
+        - name: API_PORT
+          value: "8000"
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: backend-secrets
+              key: DB_USER
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: backend-secrets
+              key: DB_PASSWORD
+        - name: DB_ADDRESS
+          valueFrom:
+            secretKeyRef:
+              name: backend-secrets
+              key: DB_ADDRESS
+      volumes:
+      - name: secrets-store-inline
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: keyvault-secret-provider
