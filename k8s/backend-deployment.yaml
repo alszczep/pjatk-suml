@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: pjatksuml3scrummasterow.azurecr.io/kotkiipieski:latest
+        image: pjatksuml3scrummasterow.azurecr.io/kotkiipieski/backend:latest
         ports:
         - containerPort: 8000
         env:

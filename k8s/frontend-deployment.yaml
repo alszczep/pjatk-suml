@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: pjatksuml3scrummasterow.azurecr.io/frontend:latest
+        image: pjatksuml3scrummasterow.azurecr.io/kotkiipieski/frontend:latest
         ports:
         - containerPort: 8501
         env:
