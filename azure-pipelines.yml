@@ -82,6 +82,9 @@ stages:
           --name $(aksClusterName) `
           --overwrite-existing
 
+          Write-Host "Deleting existing Job (if any)..."
+          kubectl delete job migrations --ignore-not-found
+
           Write-Host "Applying Kubernetes manifests..."
           kubectl apply -f "$(Build.SourcesDirectory)/k8s/"
     
