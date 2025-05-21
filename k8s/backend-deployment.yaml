@@ -49,6 +49,11 @@ spec:
             secretKeyRef:
               name: backend-secrets
               key: SECRET_KEY
+        - name: BLOB_CONNECTION_STRING
+          valueFrom:
+            secretKeyRef:
+              name: backend-secrets
+              key: BLOB_CONNECTION_STRING
         volumeMounts:
             - name: secrets-store-inline
               mountPath: "/mnt/secrets"
