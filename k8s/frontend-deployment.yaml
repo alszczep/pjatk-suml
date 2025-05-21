@@ -19,4 +19,4 @@ spec:
         - containerPort: 8501
         env:
         - name: API_URL
-          value: http://api:8000
+          value: http://backend:8000
