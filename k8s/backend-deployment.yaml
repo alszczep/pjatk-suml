@@ -39,6 +39,11 @@ spec:
             secretKeyRef:
               name: backend-secrets
               key: DB_ADDRESS
+        - name: DB_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: backend-secrets
+              key: DB_DATABASE
         - name: SECRET_KEY
           valueFrom:
             secretKeyRef:
