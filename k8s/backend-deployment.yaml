@@ -19,7 +19,7 @@ spec:
         - containerPort: 8000
         env:
         - name: ALLOWED_HOSTS
-          value: "api,localhost"
+          value: "api,localhost,backend"
         - name: API_PORT
           value: "8000"
         - name: DB_PORT
