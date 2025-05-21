@@ -13,8 +13,6 @@ spec:
           value: "api,localhost"
         - name: API_PORT
           value: "8000"
-        - name: SECRET_KEY
-          value: dev_secret
         - name: DB_ADDRESS
           valueFrom:
             secretKeyRef:
@@ -40,4 +38,20 @@ spec:
             secretKeyRef:
               name: migration-secrets
               key: DB_PORT
+        - name: SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: migration-secrets
+              key: SECRET_KEY
+        volumeMounts:
+            - name: secrets-store-inline
+              mountPath: "/mnt/secrets"
+              readOnly: true
+      volumes:
+      - name: secrets-store-inline
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: keyvault-secrets
       restartPolicy: Never
