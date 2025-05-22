@@ -1,4 +1,4 @@
-from frontendpages.admin import manageDataSet, usageHistory
+from frontendpages.admin import usageHistory
 from frontendpages.client import catOrDog
 import streamlit as st
 
@@ -7,11 +7,6 @@ pages = {
         st.Page(catOrDog.run, title="Kot czy pies?", default=True),
     ],
     "Admin": [
-        st.Page(
-            manageDataSet.run,
-            title="Zarządzanie zestawem danych",
-            url_path="admin--manage-data-set",
-        ),
         st.Page(
             usageHistory.run,
             title="Historia użycia aplkiacji klienckiej",
