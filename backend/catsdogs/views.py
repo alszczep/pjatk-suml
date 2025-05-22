@@ -7,7 +7,9 @@ from keras import models, preprocessing
 import numpy as np
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+import tempfile
 
+from .blobStorage import download_model_from_blob, upload_image_to_blob, get_blob_file_url_with_sas_token
 from .models import CatDogPrediction
 from .serializers import CatDogPredictionSerializer
 
@@ -26,9 +28,17 @@ def load_model():
         print("Existing model found locally")
         return models.load_model(model_path)
     else:
-        # TODO: load model from storage
-        print("No model found locally")
-        return None
+        try:
+            file = download_model_from_blob()
+            with tempfile.NamedTemporaryFile(suffix=".keras", delete=True) as temp_file:
+                temp_file.write(file.read())
+                temp_file.flush()
+                model = models.load_model(temp_file.name)
+                return model
+        except Exception as e:
+            print("Error loading model from blob storage:")
+            print(e)
+            return None
 
 
 @api_view(["POST"])
@@ -46,9 +56,10 @@ def predict(request):
         predictions = model.predict(img_array)
         predicted_class = np.argmax(predictions)
 
+        file_url = upload_image_to_blob(file)
+
         prediction = CatDogPrediction.objects.create(
-            # TODO: upload file to storage
-            file_url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxMMWd08C5AE2EXAyUKJ_5SLvDntWHayN0uA&s",
+            file_url=file_url,
             predicted_class=predicted_class,
             prediction_date_time=timezone.now(),
             is_vote_positive=None,
@@ -67,6 +78,11 @@ def predict(request):
 def all_predictions(request):
     queryset = CatDogPrediction.objects.all()
     serializer = CatDogPredictionSerializer(queryset, many=True)
+    data = serializer.data
+
+    for row in data:
+        row["file_url"] = get_blob_file_url_with_sas_token(row["file_url"])
+
     return Response(serializer.data)
 
 
