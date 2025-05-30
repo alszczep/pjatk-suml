@@ -23,13 +23,15 @@ def setReview(review, mark, prediction_id):
         os.environ["API_URL"] + "/api/change_vote_and_feedback", json=json_params
     )
 
+
 def predict(uploaded_file):
-    if st.session_state.predicted_class is not None or st.session_state.prediction_id is not None:
+    if (
+        st.session_state.predicted_class is not None
+        or st.session_state.prediction_id is not None
+    ):
         return
 
-    files = {
-        "file": (uploaded_file.name, uploaded_file.getvalue(), uploaded_file.type)
-    }
+    files = {"file": (uploaded_file.name, uploaded_file.getvalue(), uploaded_file.type)}
     response = requests.post(os.environ["API_URL"] + "/api/predict", files=files)
 
     if response.status_code != 200:
@@ -38,6 +40,7 @@ def predict(uploaded_file):
 
     st.session_state.predicted_class = response.json().get("predicted_class")
     st.session_state.prediction_id = response.json().get("prediction_id")
+
 
 def run():
     st.title("Kot czy pies?")

@@ -1,4 +1,5 @@
 import os
+import tempfile
 
 from PIL import Image
 from django.http import HttpResponse, JsonResponse
@@ -7,9 +8,12 @@ from keras import models, preprocessing
 import numpy as np
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-import tempfile
 
-from .blobStorage import download_model_from_blob, upload_image_to_blob, get_blob_file_url_with_sas_token
+from .blobStorage import (
+    download_model_from_blob,
+    get_blob_file_url_with_sas_token,
+    upload_image_to_blob,
+)
 from .models import CatDogPrediction
 from .serializers import CatDogPredictionSerializer
 
