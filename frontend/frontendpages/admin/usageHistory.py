@@ -18,7 +18,6 @@ def run():
         return
 
     predictions_list = response.json()
-    print(predictions_list)
 
     st.markdown("### MODEL_1_PSY_KOTY 👤Akcje użytkowników:")
 
