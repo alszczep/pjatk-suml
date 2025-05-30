@@ -22,16 +22,20 @@ def run():
     st.markdown("### MODEL_1_PSY_KOTY 👤Akcje użytkowników:")
 
     for prediction in predictions_list:
-        col1, col2 = st.columns([1, 3])
-        with col1:
-            img_response = requests.get(prediction["file_url"])
-            img = Image.open(BytesIO(img_response.content))
-            st.image(img, width=100)
-        with col2:
-            vote = "Pozytywna" if prediction["is_vote_positive"] else "Negatywna"
-            result = (
-                "Kot" if prediction["predicted_class"] == cat_class_index else "Pies"
-            )
-            st.markdown(
-                f"**Wynik:** {result}  \n**Data i czas:** {prediction['prediction_date_time']}  \n**Opinia:** {prediction['feedback']}  \n**Ocena:** {vote}"
-            )
+        try:
+            col1, col2 = st.columns([1, 3])
+            with col1:
+                img_response = requests.get(prediction["file_url"])
+                img = Image.open(BytesIO(img_response.content))
+                st.image(img, width=100)
+            with col2:
+                vote = "Pozytywna" if prediction["is_vote_positive"] else "Negatywna"
+                result = (
+                    "Kot" if prediction["predicted_class"] == cat_class_index else "Pies"
+                )
+                st.markdown(
+                    f"**Wynik:** {result}  \n**Data i czas:** {prediction['prediction_date_time']}  \n**Opinia:** {prediction['feedback']}  \n**Ocena:** {vote}"
+                )
+        except (requests.RequestException, UnidentifiedImageError, KeyError) as e:
+            print("Nie udało się załadować ")
+            continue
